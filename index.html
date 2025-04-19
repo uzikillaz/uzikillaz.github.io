@@ -454,16 +454,17 @@
         </div>
 
         <div class="button-grid">
-            <button class="script-btn" onclick="copyScript(this, 'Autofarm', 'loadstring(game:HttpGet("https://example.com/autofarm.lua"))()')">
+            <!-- Buttons with data attributes for easy configuration -->
+            <button class="script-btn" data-script-name="Autofarm" data-script-content='loadstring(game:HttpGet("https://example.com/autofarm.lua"))()'>
                 <span>Autofarm</span>
             </button>
-            <button class="script-btn" onclick="copyScript(this, 'God Mode', 'loadstring(game:HttpGet("https://example.com/godmode.lua"))()')">
+            <button class="script-btn" data-script-name="God Mode" data-script-content='loadstring(game:HttpGet("https://example.com/godmode.lua"))()'>
                 <span>God Mode</span>
             </button>
-            <button class="script-btn" onclick="copyScript(this, 'Spawner', 'loadstring(game:HttpGet("https://example.com/spawner.lua"))()')">
+            <button class="script-btn" data-script-name="Spawner" data-script-content='loadstring(game:HttpGet("https://example.com/spawner.lua"))()'>
                 <span>Spawner</span>
             </button>
-            <button class="script-btn" onclick="copyScript(this, 'Teleport', 'loadstring(game:HttpGet("https://example.com/teleport.lua"))()')">
+            <button class="script-btn" data-script-name="Teleport" data-script-content='loadstring(game:HttpGet("https://example.com/teleport.lua"))()'>
                 <span>Teleport</span>
             </button>
         </div>
@@ -677,7 +678,14 @@
             });
         }
 
+        // Copy script function with visual feedback
         function copyScript(button, name, content) {
+            // If content isn't provided, try to get it from data attributes
+            if (!content) {
+                content = button.getAttribute('data-script-content');
+                name = button.getAttribute('data-script-name') || name;
+            }
+            
             // Store original button state
             const originalHTML = button.innerHTML;
             
@@ -709,6 +717,15 @@
         window.addEventListener('DOMContentLoaded', () => {
             createCosmicBackground();
             setupSearch();
+            
+            // Set up button click handlers
+            document.querySelectorAll('.script-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const scriptName = this.getAttribute('data-script-name');
+                    const scriptContent = this.getAttribute('data-script-content');
+                    copyScript(this, scriptName, scriptContent);
+                });
+            });
             
             // Adjust on resize
             window.addEventListener('resize', () => {
