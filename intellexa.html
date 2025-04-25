@@ -222,6 +222,7 @@
     
     <header>
         <h1 class="logo">Intellexa AI</h1>
+        <p class="subtitle">Powered by Gemini 2.0 Flash</p>
     </header>
 
     <div class="chat-container">
@@ -255,10 +256,10 @@
             }
         }
 
-        // AI Configuration
+        // AI Configuration - Updated to use Gemini 2.0 Flash
         const aiLogoUrl = "https://gcdnb.pbrd.co/images/RorPZ4RHUDf6.png?o=1";
         const GEMINI_API_KEY = "AIzaSyC0xwU0I3NxC-q7YjJozVkvmMtihgaLZ9Y";
-        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
         let pastInteractions = JSON.parse(localStorage.getItem("pastInteractions")) || [];
 
         // Initialize
@@ -287,7 +288,7 @@
             // Display AI thinking message
             const thinkingMsgId = displayMessage("Thinking...", 'ai');
 
-            // Get AI response
+            // Get AI response using Gemini 2.0 Flash
             getAIResponse(userInput, thinkingMsgId);
         }
 
@@ -344,20 +345,36 @@
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    const aiResponse = response.candidates[0].content.parts[0].text;
-                    displayMessage(aiResponse, 'ai', thinkingMsgId);
-                    saveInteraction(userInput, aiResponse);
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.candidates && response.candidates[0].content.parts[0].text) {
+                            const aiResponse = response.candidates[0].content.parts[0].text;
+                            displayMessage(aiResponse, 'ai', thinkingMsgId);
+                            saveInteraction(userInput, aiResponse);
+                        } else {
+                            throw new Error("Invalid response format");
+                        }
+                    } catch (e) {
+                        displayMessage("Sorry, I couldn't process that response.", 'ai', thinkingMsgId);
+                        console.error("Error parsing response:", e);
+                    }
                 } else {
-                    throw new Error("Failed to get response");
+                    throw new Error(`API request failed with status ${xhr.status}`);
                 }
             };
 
             xhr.onerror = function() {
                 displayMessage("Sorry, I'm having trouble connecting. Please try again later.", 'ai', thinkingMsgId);
                 troubleshooter.style.display = 'block';
+                console.error("Network error occurred");
             };
 
+            xhr.ontimeout = function() {
+                displayMessage("Request timed out. Please try again.", 'ai', thinkingMsgId);
+                troubleshooter.style.display = 'block';
+            };
+
+            xhr.timeout = 10000; // 10 second timeout
             xhr.send(JSON.stringify(requestBody));
         }
 
@@ -375,5 +392,4 @@
         }
     </script>
 </body>
-</html>/body>
 </html>
