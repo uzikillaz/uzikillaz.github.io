@@ -1,8 +1,34 @@
-let xhr = new XMLHttpRequest();
-xhr.open("GET", "https://api.example.com/data", true);
-xhr.onreadystatechange = function() {
-  if (xhr.readyState == 4 && xhr.status == 200) {
-    console.log(xhr.responseText); // Process the response
-  }
-};
-xhr.send();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dangerous API Request</title>
+</head>
+<body>
+  <h2>Ask the AI</h2>
+  <input type="text" id="userInput" placeholder="Ask something...">
+  <button onclick="askAI()">Send</button>
+  <pre id="output"></pre>
+
+  <script>
+    async function askAI() {
+      const input = document.getElementById("userInput").value;
+
+      const response = await fetch("https://example-ai-api.com/v1/query", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // DANGEROUS: DO NOT expose your secret API key like this!
+          "Authorization": "Bearer sk-demo-1234567890abcdef" 
+        },
+        body: JSON.stringify({
+          prompt: input
+        })
+      });
+
+      const data = await response.json();
+      document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>
