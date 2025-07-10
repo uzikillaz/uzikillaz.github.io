@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vorzakon - Azərbaycan Kriminal Dünyası</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .title {
+            font-size: 4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #ff0000, #ff6600, #ff0000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+            to { text-shadow: 0 0 30px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.6); }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+
+        .form-container {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 0 auto;
+            max-width: 600px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #ff0000;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ff0000;
+            border-radius: 8px;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6600;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #ff0000, #ff6600);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff6600;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .result h3 {
+            color: #ff6600;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .result p {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #ff0000;
+            border-radius: 50%;
+            animation: fall 3s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        .warning {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff0000;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #ffcccc;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .form-container {
+                padding: 20px;
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation" id="background"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Vorzakon</h1>
+            <p class="subtitle">Azərbaycan Kriminal Dünyasının Səhifəsi</p>
+        </div>
+
+        <div class="form-container">
+            <form id="vorzakonForm">
+                <div class="form-group">
+                    <label for="name">Adınız:</label>
+                    <input type="text" id="name" name="name" required placeholder="Adınızı daxil edin...">
+                </div>
+
+                <div class="form-group">
+                    <label for="nickname">Ləqəb:</label>
+                    <input type="text" id="nickname" name="nickname" required placeholder="Kriminal ləqəbinizi daxil edin...">
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Yaşınız:</label>
+                    <input type="number" id="age" name="age" required min="18" max="100" placeholder="Yaşınızı daxil edin...">
+                </div>
+
+                <button type="submit" class="submit-btn">Vorzakon Statusunu Yoxla</button>
+            </form>
+
+            <div class="result" id="result">
+                <h3>Vorzakon Nəticəsi</h3>
+                <div id="resultContent"></div>
+            </div>
+
+            <div class="warning">
+                ⚠️ Bu səhifə yalnız əyləncə məqsədləri üçündür. Həqiqi kriminal fəaliyyət qanunsuzdur və ciddi nəticələrə səbəb ola bilər.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Background animation
+        function createParticles() {
+            const background = document.getElementById('background');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 3 + 's';
+                particle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                background.appendChild(particle);
+            }
+        }
+
+        // Form handling
+        document.getElementById('vorzakonForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const nickname = document.getElementById('nickname').value;
+            const age = parseInt(document.getElementById('age').value);
+            
+            const result = generateVorzakonResult(name, nickname, age);
+            displayResult(result);
+        });
+
+        function generateVorzakonResult(name, nickname, age) {
+            const statuses = [
+                'Avtoritet Vorzakon',
+                'Güclü Vorzakon',
+                'Orta Səviyyəli Vorzakon',
+                'Başlanğıc Vorzakon',
+                'Legendar Vorzakon'
+            ];
+
+            const territories = [
+                'Bakı şəhəri',
+                'Gəncə bölgəsi',
+                'Sumqayıt ərazisi',
+                'Abşeron yarımadası',
+                'Qarabağ bölgəsi'
+            ];
+
+            const specialties = [
+                'Narkotik biznesi',
+                'Silah ticarəti',
+                'Qumarxana idarəetməsi',
+                'Korrupsiya',
+                'Qaçaqmalçılıq'
+            ];
+
+            const status = statuses[Math.floor(Math.random() * statuses.length)];
+            const territory = territories[Math.floor(Math.random() * territories.length)];
+            const specialty = specialties[Math.floor(Math.random() * specialties.length)];
+            
+            let influence = Math.floor(Math.random() * 100) + 1;
+            let respect = Math.floor(Math.random() * 100) + 1;
+            let danger = Math.floor(Math.random() * 100) + 1;
+
+            // Age affects the results
+            if (age > 40) {
+                influence += 20;
+                respect += 15;
+            } else if (age < 25) {
+                influence -= 10;
+                respect -= 5;
+                danger += 15;
+            }
+
+            return {
+                name: name,
+                nickname: nickname,
+                age: age,
+                status: status,
+                territory: territory,
+                specialty: specialty,
+                influence: Math.min(influence, 100),
+                respect: Math.min(respect, 100),
+                danger: Math.min(danger, 100)
+            };
+        }
+
+        function displayResult(result) {
+            const resultDiv = document.getElementById('result');
+            const contentDiv = document.getElementById('resultContent');
+            
+            contentDiv.innerHTML = `
+                <p><strong>Ad:</strong> ${result.name}</p>
+                <p><strong>Ləqəb:</strong> "${result.nickname}"</p>
+                <p><strong>Yaş:</strong> ${result.age}</p>
+                <p><strong>Status:</strong> ${result.status}</p>
+                <p><strong>Ərazi:</strong> ${result.territory}</p>
+                <p><strong>İxtisas:</strong> ${result.specialty}</p>
+                <p><strong>Təsir Gücü:</strong> ${result.influence}%</p>
+                <p><strong>Hörmət:</strong> ${result.respect}%</p>
+                <p><strong>Təhlükə Səviyyəsi:</strong> ${result.danger}%</p>
+            `;
+            
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize background animation
+        createParticles();
+
+        // Add some interactive effects
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
