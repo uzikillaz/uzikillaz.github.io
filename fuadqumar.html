@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuadin Qumari - 777</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #FFD700;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #FFD700, #FFB700, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s infinite alternate;
+        }
+        
+        .license {
+            font-style: italic;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+        
+        .slot-machine {
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            border: 5px solid #FFD700;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+        
+        .reels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            perspective: 1000px;
+        }
+        
+        .reel {
+            width: 30%;
+            height: 150px;
+            background: #000;
+            border: 3px solid #FFD700;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+        
+        .reel-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+        
+        .symbol {
+            position: absolute;
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+            backface-visibility: hidden;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .spin-button {
+            background: linear-gradient(to bottom, #FFD700, #FF8C00);
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .spin-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .spin-button:active {
+            transform: translateY(1px);
+        }
+        
+        .result {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            min-height: 70px;
+            margin-top: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        
+        .win {
+            color: #FFD700;
+            animation: win-pulse 1s infinite alternate;
+        }
+        
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #FFD700;
+            }
+            to {
+                text-shadow: 0 0 20px #FFD700, 0 0 30px #FFD700;
+            }
+        }
+        
+        @keyframes win-pulse {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.1);
+            }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotateX(0deg); }
+            100% { transform: rotateX(360deg); }
+        }
+        
+        .cherry { color: #FF0000; }
+        .lemon { color: #FFFF00; }
+        .seven { color: #FFD700; text-shadow: 0 0 5px rgba(255, 215, 0, 0.8); }
+        .grape { color: #800080; }
+        .dassax { color: #FFFFFF; font-size: 1.5rem; }
+        .orange { color: #FFA500; }
+        .watermelon { color: #FF69B4; }
+        .bell { color: #FFD700; }
+        .bar { color: #00CED1; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Fuadin Qumari</h1>
+        <p class="license">ABŞ Səfirliyi Tərəfindən Lisenziyalaşdırılmış</p>
+    </header>
+    
+    <div class="slot-machine">
+        <div class="reels">
+            <div class="reel" id="reel1">
+                <div class="reel-content" id="reelContent1">
+                    <div class="symbol seven">7</div>
+                </div>
+            </div>
+            <div class="reel" id="reel2">
+                <div class="reel-content" id="reelContent2">
+                    <div class="symbol cherry">🍒</div>
+                </div>
+            </div>
+            <div class="reel" id="reel3">
+                <div class="reel-content" id="reelContent3">
+                    <div class="symbol lemon">🍋</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="spin-button" id="spinButton">DÖNDƏR</button>
+        </div>
+        
+        <div class="result" id="result"></div>
+    </div>
+    
+    <audio id="spinAudio" src="https://raw.githubusercontent.com/uzikillaz/uzikillaz.github.io/main/AUD-20250827-WA0003.mp3"></audio>
+    
+    <footer>
+        <p>Oyunçunun həmişə qalib gəlməsi təmin edilir | Bu sayt zarafat məqsədilə yaradılıb</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const spinButton = document.getElementById('spinButton');
+            const resultDiv = document.getElementById('result');
+            const spinAudio = document.getElementById('spinAudio');
+            const reels = [
+                document.getElementById('reelContent1'),
+                document.getElementById('reelContent2'),
+                document.getElementById('reelContent3')
+            ];
+            
+            const symbols = [
+                { class: 'cherry', html: '🍒' },
+                { class: 'lemon', html: '🍋' },
+                { class: 'grape', html: '🍇' },
+                { class: 'seven', html: '7' },
+                { class: 'dassax', html: 'daşşax' },
+                { class: 'orange', html: '🍊' },
+                { class: 'watermelon', html: '🍉' },
+                { class: 'bell', html: '🔔' },
+                { class: 'bar', html: 'BAR' }
+            ];
+            
+            let spinning = false;
+            
+            function createSymbolElements() {
+                const angleStep = 360 / symbols.length;
+                return symbols.map((symbol, index) => {
+                    const style = `transform: rotateX(${index * angleStep}deg) translateZ(100px);`;
+                    return `<div class="symbol ${symbol.class}" style="${style}">${symbol.html}</div>`;
+                }).join('');
+            }
+            
+            spinButton.addEventListener('click', function() {
+                if (spinning) return;
+                
+                spinning = true;
+                resultDiv.style.opacity = '0';
+                spinButton.disabled = true;
+                
+                // Play audio
+                spinAudio.currentTime = 0;
+                spinAudio.play().catch(e => console.log('Audio play failed:', e));
+                
+                // Initialize reels with 3D symbols
+                reels.forEach(reel => {
+                    reel.innerHTML = createSymbolElements();
+                    reel.style.transition = 'transform 10s cubic-bezier(0.1, 0.7, 0.3, 1)';
+                    reel.style.transform = `rotateX(${Math.random() * 360}deg)`;
+                });
+                
+                // Spin animation
+                const spinDuration = 10000; // 10 seconds
+                const spins = 100; // Number of full rotations
+                const degreesPerSpin = 360 * spins;
+                
+                reels.forEach(reel => {
+                    reel.style.transform = `rotateX(${degreesPerSpin}deg)`;
+                });
+                
+                setTimeout(() => {
+                    // Determine if we show 7-7-7 (10% chance) or daşşax
+                    const showSevens = Math.random() < 0.1;
+                    const finalSymbol = showSevens ? '7' : 'daşşax';
+                    const finalClass = showSevens ? 'seven' : 'dassax';
+                    
+                    reels.forEach(reel => {
+                        reel.style.transition = 'transform 0.5s ease-out';
+                        reel.innerHTML = `<div class="symbol ${finalClass}">${finalSymbol}</div>`;
+                        reel.style.transform = 'rotateX(0deg)';
+                    });
+                    
+                    // Show result
+                    setTimeout(() => {
+                        resultDiv.innerHTML = showSevens ? 'Təbriklər! 7-7-7 Qazandınız!' : 'Təbriklər! Bizdən daşşax qazandınız!';
+                        resultDiv.className = 'result win';
+                        resultDiv.style.opacity = '1';
+                        spinning = false;
+                        spinButton.disabled = false;
+                        spinAudio.pause();
+                        spinAudio.currentTime = 0;
+                    }, 500);
+                }, spinDuration);
+            });
+        });
+    </script>
+</body>
+</html>
